@@ -5,6 +5,7 @@ import FirebaseDatabase
 
 class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    
     @IBOutlet weak var tableView: UITableView!
     
     var postArray: [PostData] = []
@@ -37,7 +38,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         if Auth.auth().currentUser != nil {
             if self.observing == false {
-                // 要素が追加されたらpostArrayに追加してTableViewを再表    示する
+                // 要素が追加されたらpostArrayに追加してTableViewを再表示する
                 let postsRef = Database.database().reference().child(Const.PostPath)
                 postsRef.observe(.childAdded, with: { snapshot in
                     print("DEBUG_PRINT: .childAddedイベントが発生しました。")
@@ -97,58 +98,89 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 observing = false
             }
         }
-        
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return postArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // セルを取得してデータを設定する
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
-        cell.setPostData(postArray[indexPath.row])
         
-        // セル内のボタンのアクションをソースコードで設定する
-        cell.likeButton.addTarget(self, action:#selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return postArray.count
+        }
         
-        return cell
-    }
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            // セルを取得してデータを設定する
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
+            cell.setPostData(postArray[indexPath.row])
+            
+            // セル内のボタンのアクションをソースコードで設定する
+            cell.likeButton.addTarget(self, action:#selector(handlelikeButton(_:forEvent:)), for: .touchUpInside)
+            
+            
+            // セル内のボタンのアクションをソースコードで設定する
+            cell.commentButton.addTarget(self, action:#selector(handlecommentsButton(_:forEvent:)), for: .touchUpInside)
+            
+            return cell
+        }
+        
+        // セル内のボタンがタップされた時に呼ばれるメソッド
+        @objc func handlelikeButton(_ sender: UIButton, forEvent event: UIEvent) {
+            print("DEBUG_PRINT: likeボタンがタップされました。")
+            
+            // タップされたセルのインデックスを求める
+            let touch = event.allTouches?.first
+            let point = touch!.location(in: self.tableView)
+            let indexPath = tableView.indexPathForRow(at: point)
+            
+            // 配列からタップされたインデックスのデータを取り出す
+            let postData = postArray[indexPath!.row]
+            
+            // Firebaseに保存するデータの準備
+            if let uid = Auth.auth().currentUser?.uid {
+                if postData.isLiked {
+                    // すでにいいねをしていた場合はいいねを解除するためIDを取り除く
+                    var index = -1
+                    for likeId in postData.likes {
+                        if likeId == uid {
+                            // 削除するためにインデックスを保持しておく
+                            index = postData.likes.index(of: likeId)!
+                            break
+                        }
+                    }
+                    postData.likes.remove(at: index)
+                } else {
+                    postData.likes.append(uid)
+                }
+                
+                // 増えたlikesをFirebaseに保存する
+                let postRef = Database.database().reference().child(Const.PostPath).child(postData.id!)
+                let likes = ["likes": postData.likes]
+                postRef.updateChildValues(likes)
+                
+            }
+        }
     
     // セル内のボタンがタップされた時に呼ばれるメソッド
-    @objc func handleButton(_ sender: UIButton, forEvent event: UIEvent) {
-        print("DEBUG_PRINT: likeボタンがタップされました。")
+    @objc func handlecommentsButton(_ sender: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: commentボタンがタップされました。")
         
         // タップされたセルのインデックスを求める
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = tableView.indexPathForRow(at: point)
         
+        // postDataに必要な情報を取得しておく
+        let name = Auth.auth().currentUser?.displayName
+        
         // 配列からタップされたインデックスのデータを取り出す
         let postData = postArray[indexPath!.row]
+
+        let cell = tableView.cellForRow(at: indexPath!)  as! PostTableViewCell
+        let postDic = ["Comments": cell.commentTextField.text!]
         
-        // Firebaseに保存するデータの準備
-        if let uid = Auth.auth().currentUser?.uid {
-            if postData.isLiked {
-                // すでにいいねをしていた場合はいいねを解除するためIDを取り除く
-                var index = -1
-                for likeId in postData.likes {
-                    if likeId == uid {
-                        // 削除するためにインデックスを保持しておく
-                        index = postData.likes.index(of: likeId)!
-                        break
-                    }
-                }
-                postData.likes.remove(at: index)
-            } else {
-                postData.likes.append(uid)
-            }
-            
-            // 増えたlikesをFirebaseに保存する
-            let postRef = Database.database().reference().child(Const.PostPath).child(postData.id!)
-            let likes = ["likes": postData.likes]
-            postRef.updateChildValues(likes)
-            
-        }
+        //これまでのコメントに追加
+        postData.comments.append(postDic)
+        
+        // コメントをFirebaseに保存する
+        let postRef = Database.database().reference().child(Const.PostPath).child(postData.id!)
+       
+        let comments = ["comments": postData.comments]
+        postRef.updateChildValues(comments)
     }
 }

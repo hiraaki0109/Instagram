@@ -55,6 +55,75 @@
             </objects>
             <point key="canvasLocation" x="-615" y="104"/>
         </scene>
+        <!--Comment View Controller-->
+        <scene sceneID="hwt-cE-299">
+            <objects>
+                <viewController storyboardIdentifier="Comment" id="L64-nY-AfE" customClass="CommentViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fxc-EO-uN5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C1e-RU-w21">
+                                <rect key="frame" x="0.0" y="20" width="375" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="NcZ-fP-Z9h"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="新しいコメント" id="z6d-DW-UHQ">
+                                        <barButtonItem key="leftBarButtonItem" title="戻る" id="hmW-RM-KvL">
+                                            <connections>
+                                                <action selector="buckButton_clicked:" destination="L64-nY-AfE" id="WqN-Nn-hNy"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="コメントする" id="7AQ-wq-YN2">
+                                            <connections>
+                                                <action selector="commentButton_clicked:" destination="L64-nY-AfE" id="sos-NP-w2K"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SMu-3q-laT">
+                                <rect key="frame" x="12" y="145" width="353" height="514"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="005.png" translatesAutoresizingMaskIntoConstraints="NO" id="2po-rR-duJ">
+                                <rect key="frame" x="12" y="84" width="45" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="S1i-c6-d9N"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="SMu-3q-laT" firstAttribute="leading" secondItem="8Na-DM-KsT" secondAttribute="leading" constant="12" id="6Lm-vc-6nP"/>
+                            <constraint firstItem="C1e-RU-w21" firstAttribute="trailing" secondItem="8Na-DM-KsT" secondAttribute="trailing" id="7F9-aM-pPD"/>
+                            <constraint firstItem="2po-rR-duJ" firstAttribute="leading" secondItem="8Na-DM-KsT" secondAttribute="leading" constant="12" id="CVF-UA-1NI"/>
+                            <constraint firstItem="2po-rR-duJ" firstAttribute="leading" secondItem="SMu-3q-laT" secondAttribute="leading" id="Cvt-dS-GK4"/>
+                            <constraint firstItem="C1e-RU-w21" firstAttribute="leading" secondItem="8Na-DM-KsT" secondAttribute="leading" id="L35-hq-Vb1"/>
+                            <constraint firstItem="SMu-3q-laT" firstAttribute="top" secondItem="2po-rR-duJ" secondAttribute="bottom" constant="16" id="PXS-6l-L10"/>
+                            <constraint firstItem="8Na-DM-KsT" firstAttribute="trailing" secondItem="2po-rR-duJ" secondAttribute="trailing" constant="318" id="Soa-bs-dlk"/>
+                            <constraint firstItem="2po-rR-duJ" firstAttribute="top" secondItem="8Na-DM-KsT" secondAttribute="top" constant="64" id="VMi-Ch-r9w"/>
+                            <constraint firstItem="8Na-DM-KsT" firstAttribute="bottom" secondItem="SMu-3q-laT" secondAttribute="bottom" constant="8" id="YVe-wv-j1J"/>
+                            <constraint firstItem="8Na-DM-KsT" firstAttribute="trailing" secondItem="SMu-3q-laT" secondAttribute="trailing" constant="10" id="nEU-wh-FcU"/>
+                            <constraint firstItem="2po-rR-duJ" firstAttribute="top" secondItem="C1e-RU-w21" secondAttribute="bottom" id="o6A-BW-Xqr"/>
+                            <constraint firstItem="C1e-RU-w21" firstAttribute="top" secondItem="8Na-DM-KsT" secondAttribute="top" id="tcL-We-7nL"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8Na-DM-KsT"/>
+                    </view>
+                    <connections>
+                        <outlet property="commentText" destination="SMu-3q-laT" id="wHo-lH-oxo"/>
+                        <outlet property="imageProfile" destination="2po-rR-duJ" id="2Tm-W6-QvI"/>
+                        <outlet property="navigationBar" destination="C1e-RU-w21" id="coi-F4-Xfe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OnI-Fb-cj7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-620" y="770.46476761619192"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="2sZ-hF-7Yw">
             <objects>
@@ -316,6 +385,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="005.png" width="185" height="185"/>
         <image name="btn" width="300" height="40"/>
     </resources>
 </document>
