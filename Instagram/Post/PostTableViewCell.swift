@@ -59,6 +59,6 @@ class PostTableViewCell: UITableViewCell {
                 text += "\(comment["Comments"]!)\n"
             }
         }
-        commentDisplayLabel.text = text
+        commentDisplayLabel.text = "\(postData.name!) :  \(postData.comments)"
     }
 }

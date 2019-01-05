@@ -180,7 +180,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // コメントをFirebaseに保存する
         let postRef = Database.database().reference().child(Const.PostPath).child(postData.id!)
        
-        let comments = ["comments": postData.comments]
+        let comments = ["comments": postData.comments, "name": name!] as [String : Any]
         postRef.updateChildValues(comments)
     }
 }
